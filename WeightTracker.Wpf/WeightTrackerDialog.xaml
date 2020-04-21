@@ -1,0 +1,165 @@
+﻿<Window
+    x:Class="WeightTracker.Wpf.WeightTrackerDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:this="clr-namespace:WeightTracker.Wpf"
+    xmlns:ts="clr-namespace:WeightTracker.Wpf.TemplateSelectors"
+    xmlns:vc="clr-namespace:WeightTracker.Wpf.ValueConverters"
+    xmlns:uc="clr-namespace:WeightTracker.Wpf.Presentation.UserControls"
+    Title="Weight Tracker"
+    Height="800"
+    Width="1115"
+    Background="{StaticResource backgroundBrush}"
+    Icon="{StaticResource biWeightIcon}"
+    Loaded="Window_Loaded">
+    <Window.Resources>
+        <vc:DatedItemsConverter x:Key="datedItemsConverter" />
+        <vc:DateItemGroupsConverter x:Key="dateItemGroupsConverter" />
+
+        <CollectionViewSource x:Key="weightEntries">
+            <CollectionViewSource.Source>
+                <MultiBinding Converter="{StaticResource datedItemsConverter}">
+                    <Binding Path="WeightEntries" RelativeSource="{RelativeSource AncestorType={x:Type this:WeightTrackerDialog}}" />
+                    <Binding Path="Exercises" RelativeSource="{RelativeSource AncestorType={x:Type this:WeightTrackerDialog}}" />
+                </MultiBinding>
+            </CollectionViewSource.Source>
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription Converter="{StaticResource dateItemGroupsConverter}" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border
+            Grid.Row="0"
+            Style="{StaticResource optionsBorder}"
+            BorderThickness="0 0 0 1">
+            <StackPanel
+                Orientation="Horizontal">
+                <Button
+                    Click="btnAddWeightEntry_Click">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        
+                        <Image
+                            Grid.Column="0"
+                            Width="24"
+                            Height="24"
+                            Margin="6"
+                            Source="{StaticResource biWeightWhite}" />
+                        
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="6"
+                            VerticalAlignment="Center"
+                            Text="Add Weight Entry" />
+                    </Grid>
+                </Button>
+
+                <Button
+                    x:Name="btnAddExercise"
+                    Click="btnAddExercise_Click">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image
+                            Grid.Column="0"
+                            Width="24"
+                            Height="24"
+                            Margin="6"
+                            Source="{StaticResource biExerciseWhite}" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="6"
+                            VerticalAlignment="Center"
+                            Text="Add Exercise" />
+                    </Grid>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer            
+            Grid.Row="1"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Visible">
+            <ItemsControl
+                Margin="6"
+                ItemsSource="{Binding Source={StaticResource weightEntries}}">      
+                <ItemsControl.Resources>
+                    <Style TargetType="{x:Type GroupItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="GroupItem">
+                                    <uc:DatedItemGroupView
+                                        Header="{Binding Name}"
+                                        Margin="12"
+                                        Foreground="{StaticResource buttonBackgroundBrush}"
+                                        ExpandImageSource="{StaticResource biDownBlue}"
+                                        CollapseImageSource="{StaticResource biUpBlue}">
+                                        <uc:DatedItemGroupView.HeaderLabelStyle>
+                                            <Style TargetType="Label" BasedOn="{StaticResource labelStyle}">
+                                                <Setter Property="FontSize" Value="18" />
+                                                <Setter Property="FontWeight" Value="Bold" />
+                                                <Setter Property="Foreground" Value="{StaticResource buttonBackgroundBrush}" />
+                                            </Style>
+                                        </uc:DatedItemGroupView.HeaderLabelStyle>
+                                        <ItemsPresenter />
+                                    </uc:DatedItemGroupView>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ItemsControl.Resources>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel
+                            Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.GroupStyle>
+                    <GroupStyle />
+                </ItemsControl.GroupStyle>
+                <ItemsControl.ItemTemplateSelector>
+                    <ts:DatedItemTemplateSelector>
+                        <ts:DatedItemTemplateSelector.WeightEntryTemplate>
+                            <DataTemplate>
+                                <uc:WeightEntryView
+                                    WeightEntry="{Binding}"
+                                    WeightEntries="{Binding Path=WeightEntries, RelativeSource={RelativeSource AncestorType={x:Type this:WeightTrackerDialog}}}"
+                                    Exercises="{Binding Path=Exercises, RelativeSource={RelativeSource AncestorType={x:Type this:WeightTrackerDialog}}}"
+                                    Margin="6"
+                                    Background="{StaticResource weightEntryBackgroundBrush}"
+                                    BorderBrush="{StaticResource textBrush}"
+                                    BorderThickness="1"
+                                    DeletedWeightEntry="WeightEntryView_DeletedWeightEntry"
+                                    DeletedExercise="WeightEntryView_DeletedExercise">
+                                </uc:WeightEntryView>
+                            </DataTemplate>                            
+                        </ts:DatedItemTemplateSelector.WeightEntryTemplate>
+                        <ts:DatedItemTemplateSelector.ExerciseTemplate>
+                            <DataTemplate>
+                                <uc:ExerciseView
+                                    Margin="18 0"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="1"
+                                    Exercise="{Binding}"
+                                    DeletedExercise="ExerciseView_DeletedExercise"/>
+                            </DataTemplate>
+                        </ts:DatedItemTemplateSelector.ExerciseTemplate>
+                    </ts:DatedItemTemplateSelector>
+                </ItemsControl.ItemTemplateSelector>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</Window>

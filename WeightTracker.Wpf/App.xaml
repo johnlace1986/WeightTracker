@@ -1,0 +1,731 @@
+﻿<Application
+    x:Class="WeightTracker.Wpf.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:etk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:uc="clr-namespace:WeightTracker.Wpf.Presentation.UserControls"
+    StartupUri="WeightTrackerDialog.xaml">
+    <Application.Resources>
+
+        <!-- Images -->
+        <BitmapImage
+            x:Key="biDelete"
+            UriSource="Images/delete.png" />
+
+        <BitmapImage
+            x:Key="biDeleteWhite"
+            UriSource="Images/delete_white.png" />
+        
+        <BitmapImage
+            x:Key="biDown"
+            UriSource="Images/down.png" />
+
+        <BitmapImage
+            x:Key="biDownAll"
+            UriSource="Images/down_all.png" />
+
+        <BitmapImage
+            x:Key="biDownBlue"
+            UriSource="Images/down_blue.png" />
+
+        <BitmapImage
+            x:Key="biDownWhite"
+            UriSource="Images/down_white.png" />
+
+        <BitmapImage
+            x:Key="biExercise"
+            UriSource="Images/exercise.png" />
+
+        <BitmapImage
+            x:Key="biExerciseBlue"
+            UriSource="Images/exercise_blue.png" />
+
+        <BitmapImage
+            x:Key="biExerciseWhite"
+            UriSource="Images/exercise_white.png" />
+
+        <BitmapImage
+            x:Key="biToggle"
+            UriSource="Images/toggle.png" />
+
+        <BitmapImage
+            x:Key="biToggleWhite"
+            UriSource="Images/toggle_white.png" />
+
+        <BitmapImage
+            x:Key="biToggleBlue"
+            UriSource="Images/toggle_blue.png" />
+        
+        <BitmapImage
+            x:Key="biUp"
+            UriSource="Images/up.png" />
+
+        <BitmapImage
+            x:Key="biUpAll"
+            UriSource="Images/up_all.png" />
+
+        <BitmapImage
+            x:Key="biUpBlue"
+            UriSource="Images/up_blue.png" />
+
+        <BitmapImage
+            x:Key="biUpWhite"
+            UriSource="Images/up_white.png" />
+
+        <BitmapImage
+            x:Key="biWeight"
+            UriSource="Images/weight.png" />
+
+        <BitmapImage
+            x:Key="biWeightIcon"
+            UriSource="Images/weight_icon.png" />
+
+        <BitmapImage
+            x:Key="biWeightWhite"
+            UriSource="Images/weight_white.png" />
+
+        <!-- Brushes -->
+        <SolidColorBrush
+            x:Key="backgroundBrush"
+            Color="#f2f2f2" />
+        
+        <SolidColorBrush 
+            x:Key="textBrush"
+            Color="#666666" />
+        
+        <SolidColorBrush
+            x:Key="highlightBrush"
+            Color="#7A9883" />
+        
+        <SolidColorBrush
+            x:Key="buttonBackgroundBrush"
+            Color="#7D9DB2" />
+        
+        <SolidColorBrush
+            x:Key="buttonBorderBrush"
+            Color="#3E4E58" />
+        
+        <SolidColorBrush
+            x:Key="buttonHighlightBrush"
+            Color="#9AC2DC" />
+        
+        <SolidColorBrush
+            x:Key="optionsBackgroundBrush"
+            Color="#8C8C8C" />
+        
+        <SolidColorBrush
+            x:Key="optionsBorderBrush"
+            Color="#3F3939" />
+        
+        <SolidColorBrush
+            x:Key="weightEntryBackgroundBrush"
+            Color="#E5E5E5" />
+
+        <SolidColorBrush 
+            x:Key="errorBrush"
+            Color="#d35e67" />
+        
+        <!-- Fonts -->
+        <FontFamily x:Key="appFont">Roboto</FontFamily>
+        
+        <!-- Styles -->
+        <Style TargetType="Control" x:Key="controlStyle">
+            <Setter Property="Foreground" Value="{StaticResource textBrush}"/>
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontFamily" Value="{StaticResource appFont}" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Control" x:Key="inputControlStyle" BasedOn="{StaticResource controlStyle}">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="{StaticResource buttonBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="6" />
+            <Setter Property="Padding" Value="3" />
+        </Style>
+
+        <!-- Combo Boxes-->
+        <ControlTemplate TargetType="ComboBoxItem" x:Key="comboBoxItemTemplate">
+            <Border
+                Padding="{TemplateBinding Padding}"
+                Background="{TemplateBinding Background}">
+                <ContentPresenter />
+            </Border>
+
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource buttonHighlightBrush}" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{StaticResource buttonBackgroundBrush}" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type ComboBoxItem}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="3" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template" Value="{StaticResource comboBoxItemTemplate}" />
+        </Style>
+
+        <ControlTemplate TargetType="ToggleButton" x:Key="ComboBoxToggleButtonTemplate">
+            <Border
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border
+                        Grid.Column="0"
+                        Background="{TemplateBinding Background}"
+                        Padding="{TemplateBinding Padding}">
+                        <ContentPresenter />
+                    </Border>
+
+                    <Border
+                        Grid.Column="1"
+                        Width="28"
+                        Background="{StaticResource buttonBackgroundBrush}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="1, 0, 0, 0">
+                        <Image
+                            Stretch="None"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Source="{StaticResource biDownWhite}"/>
+                    </Border>
+                </Grid>
+            </Border>
+        </ControlTemplate>
+
+        <ControlTemplate TargetType="ComboBox" x:Key="comboBoxTemplate">
+            <Grid
+                x:Name="MainGrid">
+                <Popup
+                    x:Name="PART_Popup"
+                    Margin="6"
+                    AllowsTransparency="True"
+                    SnapsToDevicePixels="True"
+                    IsOpen="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                    Placement="Bottom"
+                    Width="{Binding ElementName=MainGrid, Path=ActualWidth}"
+                    PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
+                    <Border
+                        x:Name="DropDownBorder"
+                        Background="White"
+                        MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                        MinWidth="{Binding Path=ActualWidth, ElementName=MainGrid}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <ScrollViewer
+                            HorizontalScrollBarVisibility="Disabled"
+                            CanContentScroll="true">
+                            <ItemsPresenter                                
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                KeyboardNavigation.DirectionalNavigation="Contained"/>
+                        </ScrollViewer>
+                    </Border>
+                </Popup>
+
+                <ToggleButton
+                    x:Name="tbDropDown"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                    IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                    Padding="{TemplateBinding Padding}">
+                    <ToggleButton.Style>
+                        <Style TargetType="{x:Type ToggleButton}">
+                            <Setter Property="Cursor" Value="Hand" />
+                            <Setter Property="OverridesDefaultStyle" Value="true"/>
+                            <Setter Property="IsTabStop" Value="false"/>
+                            <Setter Property="Focusable" Value="false"/>
+                            <Setter Property="ClickMode" Value="Press"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="Template" Value="{StaticResource ComboBoxToggleButtonTemplate}" />
+                        </Style>
+                    </ToggleButton.Style>
+                    <ContentPresenter
+                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                        IsHitTestVisible="false"
+                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                        Content="{TemplateBinding SelectionBoxItem}"
+                        ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                        ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"/>
+                </ToggleButton>
+            </Grid>
+
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsGrouping" Value="true">
+                    <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        
+        <Style TargetType="ComboBox" x:Key="comboBoxStyle" BasedOn="{StaticResource inputControlStyle}">
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="Template" Value="{StaticResource comboBoxTemplate}" />            
+        </Style>
+        
+        <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource comboBoxStyle}" />
+
+        <!-- Dialog Windows -->
+        <Style TargetType="Window" x:Key="dialogStyle">
+            <Setter Property="ShowInTaskbar" Value="False" />
+            <Setter Property="WindowStyle" Value="ThreeDBorderWindow" />
+            <Setter Property="UseLayoutRounding" Value="True" />
+            <Setter Property="Background" Value="{StaticResource backgroundBrush}" />
+        </Style>
+        
+        <!-- Labels -->
+        <Style TargetType="Label" x:Key="labelStyle" BasedOn="{StaticResource controlStyle}" />
+
+        <Style TargetType="{x:Type Label}" BasedOn="{StaticResource labelStyle}" />
+
+        <Style TargetType="Label" x:Key="headerLabelStyle" BasedOn="{StaticResource labelStyle}">
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+
+        <Style TargetType="Label" x:Key="highlightedHeaderLabelStyle" BasedOn="{StaticResource headerLabelStyle}">
+            <Setter Property="Foreground" Value="{StaticResource highlightBrush}" />
+        </Style>
+
+        <!-- Data Grid -->
+        <ControlTemplate TargetType="DataGridCell" x:Key="dataGridCellTemplate">
+            <Label>
+                <ContentPresenter />
+            </Label>
+        </ControlTemplate>
+        
+        <Style TargetType="DataGridCell" x:Key="dataGridCellStyle" BasedOn="{StaticResource controlStyle}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Padding" Value="3" />
+            <Setter Property="Template" Value="{StaticResource dataGridCellTemplate}" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Background" Value="{StaticResource highlightBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <ControlTemplate TargetType="DataGridColumnHeader" x:Key="dataGridColumnHeaderTemplate">
+            <Border
+                Padding="{TemplateBinding Padding}"
+                Background="{TemplateBinding Background}">
+                <Label
+                    Style="{StaticResource headerLabelStyle}">
+                    <ContentPresenter
+                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                        ContentSource="Content" />
+                </Label>
+            </Border>
+        </ControlTemplate>
+        
+        <Style TargetType="ContentControl" x:Key="dataGridColumnHeaderStyle" BasedOn="{StaticResource controlStyle}">
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="{StaticResource backgroundBrush}" />
+            <Setter Property="Padding" Value="0 6" />
+            <Setter Property="Template" Value="{StaticResource dataGridColumnHeaderTemplate}" />
+        </Style>
+
+        <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource controlStyle}">
+            <Setter Property="Background" Value="{StaticResource backgroundBrush}" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="{StaticResource textBrush}"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{StaticResource highlightBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style TargetType="DataGrid" x:Key="dataGridStyle">
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="CanUserAddRows" Value="False" />
+            <Setter Property="CanUserDeleteRows" Value="False" />
+            <Setter Property="CanUserReorderColumns" Value="False" />
+            <Setter Property="CanUserResizeColumns" Value="False" />
+            <Setter Property="CanUserResizeRows" Value="False" />
+            <Setter Property="CanUserSortColumns" Value="False" />
+            <Setter Property="SelectionUnit" Value="FullRow" />
+            <Setter Property="SelectionMode" Value="Single" />
+            <Setter Property="ColumnHeaderStyle" Value="{StaticResource dataGridColumnHeaderStyle}" />
+            <Setter Property="HorizontalGridLinesBrush" Value="Transparent" />
+            <Setter Property="VerticalGridLinesBrush" Value="Transparent" />
+            <Setter Property="RowHeaderWidth" Value="0" />
+            <Setter Property="BorderBrush" Value="{StaticResource textBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CellStyle" Value="{StaticResource dataGridCellStyle}" />
+        </Style>
+        
+        <Style TargetType="{x:Type DataGrid}" BasedOn="{StaticResource dataGridStyle}" />
+        
+        <!-- Button -->
+        <ControlTemplate TargetType="ButtonBase" x:Key="buttonTemplate">
+            <Border
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                Padding="{TemplateBinding Padding}">
+                <Label
+                    FontSize="{TemplateBinding FontSize}"
+                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                    Foreground="{TemplateBinding Foreground}">
+                    <ContentPresenter
+                        ContentSource="Content" />
+                </Label>
+            </Border>                            
+        </ControlTemplate>
+        
+        <Style TargetType="ButtonBase" x:Key="buttonStyle" BasedOn="{StaticResource controlStyle}">
+            <Setter Property="Background" Value="{StaticResource buttonBackgroundBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource buttonBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Padding" Value="12 6" />
+            <Setter Property="Margin" Value="6" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Template" Value="{StaticResource buttonTemplate}" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource buttonHighlightBrush}" />
+                </Trigger>
+                <Trigger Property="IsMouseCaptured" Value="True">
+                    <Setter Property="Background" Value="{Binding Path=BorderBrush, RelativeSource={RelativeSource Self}}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource buttonStyle}" />
+
+        <!-- Value Views -->
+        <Style TargetType="Button" x:Key="toggleViewButtonStyle" BasedOn="{StaticResource controlStyle}">
+            <Setter Property="Margin" Value="6" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Height" Value="16" />
+            <Setter Property="Content" Value="{StaticResource biToggle}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Image
+                            Height="{TemplateBinding Height}"
+                            Width="{TemplateBinding Width}"
+                            Source="{TemplateBinding Content}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style TargetType="uc:ValueView" x:Key="valueViewStyle">
+            <Setter Property="ToggleButtonStyle" Value="{StaticResource toggleViewButtonStyle}" />
+            <Setter Property="Foreground" Value="{StaticResource textBrush}"/>
+        </Style>
+
+        <!-- Distance Value Views -->
+        <Style TargetType="uc:DistanceValueView" x:Key="distanceValueViewStyle" BasedOn="{StaticResource valueViewStyle}" />
+
+        <Style TargetType="{x:Type uc:DistanceValueView}" BasedOn="{StaticResource distanceValueViewStyle}" />
+
+        <!-- Pace Value Views -->
+        <Style TargetType="uc:PaceValueView" x:Key="paceValueViewStyle" BasedOn="{StaticResource valueViewStyle}" />
+
+        <Style TargetType="{x:Type uc:PaceValueView}" BasedOn="{StaticResource paceValueViewStyle}" />
+
+        <!-- Time Value Views -->
+        <Style TargetType="uc:TimeValueView" x:Key="timeValueViewStyle" BasedOn="{StaticResource valueViewStyle}" />
+
+        <Style TargetType="{x:Type uc:TimeValueView}" BasedOn="{StaticResource timeValueViewStyle}" />
+
+        <!-- Weight Value Views -->
+        <Style TargetType="uc:WeightValueView" x:Key="weightValueViewStyle" BasedOn="{StaticResource valueViewStyle}" />
+
+        <Style TargetType="{x:Type uc:WeightValueView}" BasedOn="{StaticResource weightValueViewStyle}" />
+
+        <!-- Text Boxes -->
+        <ControlTemplate TargetType="TextBoxBase" x:Key="textBoxTemplate">
+            <Border
+                Background="{TemplateBinding Background}"                
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                Padding="{TemplateBinding Padding}">
+                <ScrollViewer                
+                    x:Name="PART_ContentHost"
+                    Foreground="{TemplateBinding Foreground}"
+                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                    Margin="0"/>
+            </Border>
+        </ControlTemplate>
+        
+        <!-- Date Pickers -->
+        <Style TargetType="DatePicker" x:Key="datePickerStyle" BasedOn="{StaticResource inputControlStyle}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DatePicker">
+                        <Border
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
+                            <Grid
+                                x:Name="MainGrid">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <DatePickerTextBox 
+                                    Name="PART_TextBox"
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                    <DatePickerTextBox.Style>
+                                        <Style TargetType="{x:Type DatePickerTextBox}">
+                                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                            <Setter Property="OverridesDefaultStyle" Value="True"/>
+                                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                            <Setter Property="AllowDrop" Value="true"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>                                                    
+                                                    <ControlTemplate TargetType="TextBoxBase">
+                                                        <ScrollViewer
+                                                            x:Name="PART_ContentHost"
+                                                            Margin="0"/>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DatePickerTextBox.Style>
+                                </DatePickerTextBox>
+
+                                <Button
+                                    Name="PART_Button"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Width="24"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    VerticalAlignment="Center">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border
+                                                BorderBrush="{StaticResource buttonBorderBrush}"
+                                                BorderThickness="1">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <Border
+                                                        Grid.Row="0"
+                                                        BorderThickness="0 0 0 1"
+                                                        BorderBrush="{StaticResource buttonBorderBrush}"
+                                                        Background="{StaticResource buttonBackgroundBrush}">
+
+                                                        <Ellipse
+                                                            Width="3"
+                                                            Height="3"
+                                                            Margin="1"
+                                                            Fill="White"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center" />
+                                                    </Border>
+
+                                                    <Border
+                                                        Grid.Row="1"
+                                                        Background="{StaticResource backgroundBrush}"
+                                                        Padding="1">
+                                                        <TextBlock
+                                                            FontSize="12"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="{TemplateBinding Foreground}"
+                                                            Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat=%d}" />
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                                <Popup
+                                    x:Name="PART_Popup"
+                                    Margin="6"
+                                    AllowsTransparency="true"
+                                    SnapsToDevicePixels="True"
+                                    IsOpen="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Placement="Bottom"
+                                    StaysOpen="False"
+                                    PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" />
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type DatePicker}" BasedOn="{StaticResource datePickerStyle}" />
+        
+        <!-- Button Spinners -->
+        <Style TargetType="etk:ButtonSpinner" x:Key="buttonSpinnerStyle" BasedOn="{StaticResource controlStyle}">
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="etk:ButtonSpinner">
+                        <ControlTemplate.Resources>
+                            <Style TargetType="{x:Type RepeatButton}" BasedOn="{StaticResource buttonStyle}">
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="Padding" Value="0" />
+                            </Style>
+                        </ControlTemplate.Resources>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <ContentPresenter
+                                Grid.Column="0"
+                                Content="{TemplateBinding Content}"
+                                Focusable="False"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            
+                            <Grid
+                                Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                
+                                <RepeatButton
+                                    x:Name="PART_IncreaseButton"
+                                    Grid.Row="0"
+                                    Margin="0 -1 -1 -1"
+                                    IsTabStop="{TemplateBinding IsTabStop}">
+                                    <Image
+                                        Stretch="None"
+                                        Source="{StaticResource biUpWhite}" />
+                                </RepeatButton>
+                                
+                                <RepeatButton
+                                    x:Name="PART_DecreaseButton"
+                                    Grid.Row="1"
+                                    Margin="0 -1 -1 -1"
+                                    IsTabStop="{TemplateBinding IsTabStop}">
+                                    <Image
+                                        Stretch="None"
+                                        Source="{StaticResource biDownWhite}" />
+                                </RepeatButton>
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Watermark Text Boxes-->
+        <Style TargetType="etk:WatermarkTextBox" x:Key="watermarkTextBoxStyle" BasedOn="{StaticResource inputControlStyle}">
+            <Setter Property="Template" Value="{StaticResource textBoxTemplate}" />
+        </Style>
+
+        <!-- Integer Up/Downs -->
+        <Style TargetType="etk:IntegerUpDown" x:Key="integerUpDownStyle" BasedOn="{StaticResource inputControlStyle}">
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type etk:IntegerUpDown}">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <etk:ButtonSpinner
+                                x:Name="PART_Spinner"
+                                Margin="-1 0 0 0"
+                                Style="{StaticResource buttonSpinnerStyle}">
+                                <etk:WatermarkTextBox
+                                    x:Name="PART_TextBox"
+                                    Margin="{TemplateBinding Padding}"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0"
+                                    TextAlignment="{TemplateBinding TextAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                    Style="{StaticResource watermarkTextBoxStyle}"/>
+                            </etk:ButtonSpinner>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type etk:IntegerUpDown}" BasedOn="{StaticResource integerUpDownStyle}" />
+
+        <!-- Decimal Up/Downs -->
+        <Style TargetType="etk:DecimalUpDown" x:Key="decimalUpDownStyle" BasedOn="{StaticResource inputControlStyle}">
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type etk:DecimalUpDown}">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <etk:ButtonSpinner
+                                x:Name="PART_Spinner"
+                                Margin="-1 0 0 0"
+                                Style="{StaticResource buttonSpinnerStyle}">
+                                <etk:WatermarkTextBox
+                                    x:Name="PART_TextBox"
+                                    Margin="{TemplateBinding Padding}"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0"
+                                    TextAlignment="{TemplateBinding TextAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                    Style="{StaticResource watermarkTextBoxStyle}"/>
+                            </etk:ButtonSpinner>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style TargetType="{x:Type etk:DecimalUpDown}" BasedOn="{StaticResource decimalUpDownStyle}" />
+
+        <!-- Options Border -->
+        <Style TargetType="Border" x:Key="optionsBorder">
+            <Setter Property="Padding" Value="6" />
+            <Setter Property="Background" Value="{StaticResource optionsBackgroundBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource optionsBorderBrush}" />
+        </Style>
+
+    </Application.Resources>
+</Application>

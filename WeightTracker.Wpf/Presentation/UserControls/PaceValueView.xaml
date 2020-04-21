@@ -1,0 +1,105 @@
+﻿<uc:ValueView
+    x:Class="WeightTracker.Wpf.Presentation.UserControls.PaceValueView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:uc="clr-namespace:WeightTracker.Wpf.Presentation.UserControls"
+    xmlns:vc="clr-namespace:WeightTracker.Wpf.ValueConverters"
+    mc:Ignorable="d" 
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+    <uc:ValueView.Resources>        
+        <vc:PaceViewVisibilityConverter x:Key="PaceViewVisibilityConverter" />
+        <vc:MinutesPerKilometerConverter x:Key="MinutesPerKilometerConverter" />
+        <vc:MinutesPerMileConverter x:Key="MinutesPerMileConverter" />
+        <vc:KilometersPerHourConverter x:Key="KilometersPerHourConverter" />
+        <vc:MilesPerHourConverter x:Key="MilesPerHourConverter" />
+    </uc:ValueView.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Button
+            x:Name="BtnPaceViewMinutesPerKilometer"
+            Grid.Column="0"
+            Style="{Binding Path=ToggleButtonStyle, RelativeSource={RelativeSource AncestorType={x:Type uc:PaceValueView}}}"
+            Visibility="{Binding Path=ViewStyle, Converter={StaticResource PaceViewVisibilityConverter}, ConverterParameter=MinutesPerKilometer, RelativeSource={RelativeSource AncestorType={x:Type uc:PaceValueView}}}"
+            Click="btnPaceViewMinutesPerKilometer_Click" />
+
+        <Label
+            Grid.Column="1"
+            Visibility="{Binding Path=ViewStyle, Converter={StaticResource PaceViewVisibilityConverter}, ConverterParameter=MinutesPerKilometer, RelativeSource={RelativeSource AncestorType={x:Type uc:PaceValueView}}}">
+            <TextBlock>
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource MinutesPerKilometerConverter}">
+                        <Binding Path="Distance" Mode="OneWay" RelativeSource="{RelativeSource AncestorType={x:Type uc:PaceValueView}}" />
+                        <Binding Path="TimeTaken" Mode="OneWay" RelativeSource="{RelativeSource AncestorType={x:Type uc:PaceValueView}}" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </Label>
+
+        <Button
+            x:Name="BtnPaceViewMinutesPerMile"
+            Grid.Column="0"
+            Style="{Binding Path=ToggleButtonStyle, RelativeSource={RelativeSource AncestorType={x:Type uc:PaceValueView}}}"
+            Visibility="{Binding Path=ViewStyle, Converter={StaticResource PaceViewVisibilityConverter}, ConverterParameter=MinutesPerMile, RelativeSource={RelativeSource AncestorType={x:Type uc:PaceValueView}}}"
+            Click="btnPaceViewMinutesPerMile_Click" />
+
+        <Label
+            Grid.Column="1"
+            Visibility="{Binding Path=ViewStyle, Converter={StaticResource PaceViewVisibilityConverter}, ConverterParameter=MinutesPerMile, RelativeSource={RelativeSource AncestorType={x:Type uc:PaceValueView}}}">
+            <TextBlock>
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource MinutesPerMileConverter}">
+                        <Binding Path="Distance" Mode="OneWay" RelativeSource="{RelativeSource AncestorType={x:Type uc:PaceValueView}}" />
+                        <Binding Path="TimeTaken" Mode="OneWay" RelativeSource="{RelativeSource AncestorType={x:Type uc:PaceValueView}}" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </Label>
+
+        <Button
+            x:Name="BtnPaceViewKilometersPerHour"
+            Grid.Column="0"
+            Style="{Binding Path=ToggleButtonStyle, RelativeSource={RelativeSource AncestorType={x:Type uc:PaceValueView}}}"
+            Visibility="{Binding Path=ViewStyle, Converter={StaticResource PaceViewVisibilityConverter}, ConverterParameter=KilometersPerHour, RelativeSource={RelativeSource AncestorType={x:Type uc:PaceValueView}}}"
+            Click="btnPaceViewKilometersPerHour_Click" />
+
+        <Label
+            Grid.Column="1"
+            Visibility="{Binding Path=ViewStyle, Converter={StaticResource PaceViewVisibilityConverter}, ConverterParameter=KilometersPerHour, RelativeSource={RelativeSource AncestorType={x:Type uc:PaceValueView}}}">
+            <TextBlock>
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource KilometersPerHourConverter}" StringFormat="{}{0:0.00 kmph}">
+                        <Binding Path="Distance" Mode="OneWay" RelativeSource="{RelativeSource AncestorType={x:Type uc:PaceValueView}}" />
+                        <Binding Path="TimeTaken" Mode="OneWay" RelativeSource="{RelativeSource AncestorType={x:Type uc:PaceValueView}}" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </Label>
+
+        <Button
+            x:Name="BtnPaceViewMilesPerHour"
+            Grid.Column="0"
+            Style="{Binding Path=ToggleButtonStyle, RelativeSource={RelativeSource AncestorType={x:Type uc:PaceValueView}}}"
+            Visibility="{Binding Path=ViewStyle, Converter={StaticResource PaceViewVisibilityConverter}, ConverterParameter=MilesPerHour, RelativeSource={RelativeSource AncestorType={x:Type uc:PaceValueView}}}"
+            Click="btnPaceViewMilesPerHour_Click" />
+
+        <Label
+            Grid.Column="1"
+            Visibility="{Binding Path=ViewStyle, Converter={StaticResource PaceViewVisibilityConverter}, ConverterParameter=MilesPerHour, RelativeSource={RelativeSource AncestorType={x:Type uc:PaceValueView}}}">
+            <TextBlock>
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource MilesPerHourConverter}" StringFormat="{}{0:0.00 mph}">
+                        <Binding Path="Distance" Mode="OneWay" RelativeSource="{RelativeSource AncestorType={x:Type uc:PaceValueView}}" />
+                        <Binding Path="TimeTaken" Mode="OneWay" RelativeSource="{RelativeSource AncestorType={x:Type uc:PaceValueView}}" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </Label>
+    </Grid>
+</uc:ValueView>

@@ -1,0 +1,125 @@
+﻿<Window
+    x:Class="WeightTracker.Wpf.Presentation.Windows.ExerciseDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:etk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:uuc="clr-namespace:Utilities.Presentation.WPF.UserControls;assembly=Utilities"
+    xmlns:uvc="clr-namespace:Utilities.ValueConverters;assembly=Utilities"
+    xmlns:uc="clr-namespace:WeightTracker.Wpf.Presentation.UserControls"
+    xmlns:windows="clr-namespace:WeightTracker.Wpf.Presentation.Windows"
+    Title="Exercise"
+    Width="500"
+    SizeToContent="Height"
+    Style="{StaticResource dialogStyle}"
+    Icon="{StaticResource biExercise}"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <uvc:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border
+            Grid.Row="0"
+            Padding="12">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="180" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Style="{StaticResource headerLabelStyle}"
+                    Content="Date:" />
+
+                <DatePicker
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    SelectedDate="{Binding Path=Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type windows:ExerciseDialog}}}"/>
+
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Style="{StaticResource headerLabelStyle}"
+                    Content="Distance:" />
+
+                <etk:DecimalUpDown
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    FormatString="0.00 km"
+                    Minimum="0"
+                    Value="{Binding Path=Distance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type windows:ExerciseDialog}}}" />
+
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Style="{StaticResource headerLabelStyle}"
+                    Content="Time Taken:" />
+
+                <uuc:TimeSpanPicker
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    IncludeDays="False"
+                    Value="{Binding Path=TimeTaken, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type windows:ExerciseDialog}}}" />
+
+                <Label
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Style="{StaticResource headerLabelStyle}"
+                    Content="Pace:" />
+
+                <uc:PaceValueView
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Margin="0 9"
+                    Distance="{Binding Path=Distance, RelativeSource={RelativeSource AncestorType={x:Type windows:ExerciseDialog}}}"
+                    TimeTaken="{Binding Path=TimeTaken, RelativeSource={RelativeSource AncestorType={x:Type windows:ExerciseDialog}}}">
+                    <uc:PaceValueView.ToggleButtonStyle>
+                        <Style TargetType="Button" BasedOn="{StaticResource toggleViewButtonStyle}">
+                            <Setter Property="Content" Value="{StaticResource biToggleBlue}" />
+                        </Style>
+                    </uc:PaceValueView.ToggleButtonStyle>                    
+                </uc:PaceValueView>
+                
+                <Label
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    Style="{StaticResource headerLabelStyle}"
+                    Content="Calories Burned:" />
+
+                <etk:IntegerUpDown
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    FormatString="0 kcal"
+                    Minimum="0"
+                    Increment="100"
+                    Value="{Binding Path=CaloriesBurned, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type windows:ExerciseDialog}}}" />
+            </Grid>
+        </Border>
+
+        <Border
+            Grid.Row="1"
+            Style="{StaticResource optionsBorder}"
+            BorderThickness="0 1 0 0">
+            <Button
+                x:Name="BtnOk"
+                Content="OK"
+                Width="120"
+                Click="btnOK_Click" />
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,433 @@
+﻿<UserControl
+    x:Class="WeightTracker.Wpf.Presentation.UserControls.WeightEntryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:uc="clr-namespace:WeightTracker.Wpf.Presentation.UserControls"
+    xmlns:vc="clr-namespace:WeightTracker.Wpf.ValueConverters"
+    xmlns:uvc="clr-namespace:Utilities.ValueConverters;assembly=Utilities"
+    xmlns:properties="clr-namespace:WeightTracker.Wpf.Properties"
+    mc:Ignorable="d" 
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+    <UserControl.Resources>
+        <vc:PoundsLostSinceLastEntryConverter x:Key="poundsLostSinceLastEntryConverter" />
+        <vc:PoundsLostSinceLastEntryForegroundConverter x:Key="poundsLostSinceLastEntryForegroundConverter" />
+        <vc:PoundsLostInTotalConverter x:Key="poundsLostInTotalConverter"/>
+        <vc:LosingPerWeekConverter x:Key="losingPerWeekConverter" />
+        <vc:WeightEntryDistanceConverter x:Key="weightEntryDistanceConverter" />
+        <vc:WeightEntryTimeTakenConverter x:Key="weightEntryTimeTakenConverter" />
+        <vc:WeightEntryExercisesConverter x:Key="weightEntryExercisesConverter" />
+        <vc:WeightEntryViewHeaderCursorConverter x:Key="weightEntryViewHeaderCursorConverter" />
+        <vc:PoundsLeftToLoseConverter x:Key="poundsLeftToLoseConverter" />
+        <uvc:BooleanVisibilityConverter x:Key="booleanVisibilityConverter" />
+        <uvc:InverseBooleanVisibilityConverter x:Key="inverseBooleanVisibilityConverter"></uvc:InverseBooleanVisibilityConverter>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ToggleButton
+            Grid.Row="0"
+            Cursor="{Binding Path=CanExpand, Converter={StaticResource weightEntryViewHeaderCursorConverter}}"
+            Background="Transparent"
+            Padding="12 6"
+            IsChecked="{Binding Path=IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type uc:WeightEntryView}}}">
+            <ToggleButton.Template>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="44" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Image
+                                Grid.Column="0"
+                                Height="24"
+                                Width="24"
+                                Margin="6"
+                                Source="{StaticResource biWeight}" />
+
+                            <Button
+                                x:Name="btnDeleteWeightEntry"
+                                Grid.Column="1"
+                                Margin="6"                                     
+                                Cursor="Hand"
+                                Visibility="{Binding Path=CanExpand, Converter={StaticResource booleanVisibilityConverter}}"
+                                Click="btnDeleteWeightEntry_Click">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Image
+                                            x:Name="imgArrow"
+                                            Height="24"
+                                            Width="24"
+                                            Source="{StaticResource biDelete}" />
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Grid
+                                Grid.Column="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="210" />
+                                    <ColumnDefinition Width="24" />
+                                    <ColumnDefinition Width="180" />
+                                    <ColumnDefinition Width="24" />
+                                    <ColumnDefinition Width="180" />
+                                    <ColumnDefinition Width="24" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Label
+                                    Grid.Column="0"
+                                    Style="{StaticResource highlightedHeaderLabelStyle}">
+                                    <TextBlock Text="{Binding Path=WeightEntry.Date, StringFormat={}{0:ddd d MMMM yyyy}, RelativeSource={RelativeSource AncestorType={x:Type uc:WeightEntryView}}}" />
+                                </Label>
+
+                                <uc:WeightValueView
+                                    Grid.Column="2"
+                                    Visibility="{Binding Path=IsExpanded, Converter={StaticResource inverseBooleanVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type uc:WeightEntryView}}}"
+                                    Weight="{Binding Path=WeightEntry.Value, RelativeSource={RelativeSource AncestorType={x:Type uc:WeightEntryView}}}" />
+
+                                <uc:DistanceValueView
+                                    Grid.Column="4"
+                                    Visibility="{Binding Path=IsExpanded, Converter={StaticResource inverseBooleanVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type uc:WeightEntryView}}}">
+                                    <uc:DistanceValueView.Distance>
+                                        <MultiBinding Converter="{StaticResource weightEntryDistanceConverter}">
+                                            <Binding Path="Exercises" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                            <Binding Path="WeightEntries" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                            <Binding Path="WeightEntry" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                        </MultiBinding>
+                                    </uc:DistanceValueView.Distance>
+                                </uc:DistanceValueView>
+
+                                <ItemsControl
+                                    Grid.Column="6"
+                                    Visibility="{Binding Path=IsExpanded, Converter={StaticResource inverseBooleanVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type uc:WeightEntryView}}}">
+                                    <ItemsControl.ItemsSource>
+                                        <MultiBinding Converter="{StaticResource weightEntryExercisesConverter}">
+                                            <Binding Path="Exercises" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                            <Binding Path="WeightEntries" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                            <Binding />
+                                        </MultiBinding>
+                                    </ItemsControl.ItemsSource>
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel
+                                                Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button           
+                                                x:Name="btnExercise"
+                                                Cursor="Hand"
+                                                Click="btnExercise_OnClick">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Image
+                                                            Width="24"
+                                                            Height="24"
+                                                            Source="{StaticResource biExercise}" />
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Grid>
+
+                            <Image
+                                x:Name="imgArrow"
+                                Grid.Column="3"
+                                Height="24"
+                                Width="24"
+                                Visibility="{Binding Path=CanExpand, Converter={StaticResource booleanVisibilityConverter}}"
+                                Source="{StaticResource biDown}" />
+                        </Grid>
+                    </Border>
+                                                    
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="imgArrow" Property="Source" Value="{StaticResource biUp}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </ToggleButton.Template>
+        </ToggleButton>
+
+        <ScrollViewer
+            Grid.Row="1"
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Disabled"
+            Padding="12 6"
+            Visibility="{Binding Path=IsExpanded, Converter={StaticResource booleanVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type uc:WeightEntryView}}}">
+            <Grid
+                Visibility="{Binding Path=CanExpand, Converter={StaticResource booleanVisibilityConverter}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                        Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" MinWidth="180" />
+                            <ColumnDefinition Width="*" MinWidth="180" />
+                            <ColumnDefinition Width="*" MinWidth="180" />
+                            <ColumnDefinition Width="*" MinWidth="180" />
+                            <ColumnDefinition Width="*" MinWidth="150" />
+                            <ColumnDefinition Width="*" MinWidth="180" />
+                            <ColumnDefinition Width="*" MinWidth="150" />
+                            <ColumnDefinition Width="*" MinWidth="150" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Style="{StaticResource headerLabelStyle}"
+                            Content="Time Dieting" />
+
+                        <uc:TimeValueView
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            StartDate="{Binding Path=StartDate, Source={x:Static properties:Settings.Default}}"
+                            EndDate="{Binding Path=WeightEntry.Date, RelativeSource={RelativeSource AncestorType={x:Type uc:WeightEntryView}}}" />
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Style="{StaticResource headerLabelStyle}"
+                            Content="Current Weight" />
+
+                        <uc:WeightValueView
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Weight="{Binding Path=WeightEntry.Value, RelativeSource={RelativeSource AncestorType={x:Type uc:WeightEntryView}}}" />
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Style="{StaticResource headerLabelStyle}"
+                            Content="Lost This Week" />
+
+                        <uc:WeightValueView
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            ViewStyle="Pounds">
+                            <uc:WeightValueView.Foreground>
+                                <MultiBinding Converter="{StaticResource poundsLostSinceLastEntryForegroundConverter}">
+                                    <Binding Path="WeightEntry" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                    <Binding Path="WeightEntries" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                </MultiBinding>
+                            </uc:WeightValueView.Foreground>
+                            <uc:WeightValueView.Weight>
+                                <MultiBinding Converter="{StaticResource poundsLostSinceLastEntryConverter}" StringFormat="{}{0:0.0 lbs}">
+                                    <Binding Path="WeightEntry" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                    <Binding Path="WeightEntries" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                </MultiBinding>
+                            </uc:WeightValueView.Weight>
+                        </uc:WeightValueView>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            Style="{StaticResource headerLabelStyle}"
+                            Content="Lost In Total" />
+
+                        <uc:WeightValueView
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Weight="{Binding Path=WeightEntry.Value, Converter={StaticResource poundsLostInTotalConverter}, RelativeSource={RelativeSource AncestorType={x:Type uc:WeightEntryView}}}"
+                            ViewStyle="Pounds"/>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="4"
+                            Style="{StaticResource headerLabelStyle}"
+                            Content="Losing Per Week" />
+
+                        <uc:WeightValueView
+                            Grid.Row="1"
+                            Grid.Column="4"
+                            Weight="{Binding Path=WeightEntry, Converter={StaticResource losingPerWeekConverter}, StringFormat={}{0:0.00 lbs}, RelativeSource={RelativeSource AncestorType={x:Type uc:WeightEntryView}}}"
+                            ViewStyle="Pounds" />
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="5"
+                            Style="{StaticResource headerLabelStyle}"
+                            Content="Distance Run" />
+
+                        <uc:DistanceValueView
+                            Grid.Row="1"
+                            Grid.Column="5">
+                            <uc:DistanceValueView.Distance>
+                                <MultiBinding Converter="{StaticResource weightEntryDistanceConverter}">
+                                    <Binding Path="Exercises" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                    <Binding Path="WeightEntries" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                    <Binding Path="WeightEntry" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                </MultiBinding>
+                            </uc:DistanceValueView.Distance>
+                        </uc:DistanceValueView>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="6"
+                            Style="{StaticResource headerLabelStyle}"
+                            Content="Time Taken" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="6">
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource weightEntryTimeTakenConverter}" StringFormat="{}{0}">
+                                        <Binding Path="Exercises" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                        <Binding Path="WeightEntries" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                        <Binding Path="WeightEntry" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </Label>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="7"
+                            Style="{StaticResource headerLabelStyle}"
+                            Content="Left to Lose" />
+
+                        <uc:WeightValueView
+                            Grid.Row="1"
+                            Grid.Column="7"
+                            Weight="{Binding Path=WeightEntry.Value, Converter={StaticResource poundsLeftToLoseConverter}, RelativeSource={RelativeSource AncestorType={x:Type uc:WeightEntryView}}}" 
+                            ViewStyle="Pounds"/>
+
+                    </Grid>
+
+                    <DataGrid
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch"
+                        Margin="6 6 6 12"
+                        SelectedItem="{Binding Path=SelectedExercise, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type uc:WeightEntryView}}}">
+                        <DataGrid.Resources>
+                            <Style TargetType="uc:ValueView" x:Key="dataGridValueViewStyle" BasedOn="{StaticResource valueViewStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=DataGridCell}}" Value="True">
+                                        <Setter Property="ToggleButtonStyle">
+                                            <Setter.Value>
+                                                <Style TargetType="Button" BasedOn="{StaticResource toggleViewButtonStyle}">
+                                                    <Setter Property="Content" Value="{StaticResource biToggleWhite}" />
+                                                </Style>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>                                                                
+                                </Style.Triggers>
+                            </Style>
+
+                            <Style TargetType="{x:Type uc:DistanceValueView}" BasedOn="{StaticResource dataGridValueViewStyle}" />
+
+                            <Style TargetType="{x:Type uc:PaceValueView}" BasedOn="{StaticResource dataGridValueViewStyle}" />
+
+                            <Style TargetType="Label" BasedOn="{StaticResource labelStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=DataGridCell}}" Value="True">
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.ItemsSource>
+                            <MultiBinding Converter="{StaticResource weightEntryExercisesConverter}">
+                                <Binding Path="Exercises" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                <Binding Path="WeightEntries" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                                <Binding Path="WeightEntry" RelativeSource="{RelativeSource AncestorType={x:Type uc:WeightEntryView}}" />
+                            </MultiBinding>
+                        </DataGrid.ItemsSource>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image
+                                            x:Name="imgExercise"
+                                            Margin="6"
+                                            Width="24"
+                                            Height="24"
+                                            Source="{StaticResource biExercise}" />
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=DataGridCell}}" Value="True">
+                                                <Setter TargetName="imgExercise" Property="Source" Value="{StaticResource biExerciseWhite}" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Date" Binding="{Binding Date, Mode=OneWay, StringFormat={}{0:ddd d MMMM yyyy}}" Width="210" />
+                            <DataGridTemplateColumn Header="Distance" Width="180">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <uc:DistanceValueView                                                                        
+                                            Distance="{Binding Path=Distance, Mode=OneWay}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Time Taken" Binding="{Binding TimeTaken, Mode=OneWay}" Width="165" />
+                            <DataGridTextColumn Header="Calories Burned" Binding="{Binding CaloriesBurned, Mode=OneWay, StringFormat={}{0:0 kcal}}" Width="165" />
+                            <DataGridTemplateColumn Header="Pace" Width="180">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <uc:PaceValueView
+                                            Distance="{Binding Path=Distance, Mode=OneWay}"
+                                            TimeTaken="{Binding Path=TimeTaken, Mode=OneWay}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            x:Name="btnDeleteExcercise"
+                                            Margin="6"
+                                            Cursor="Hand"
+                                            Height="24"
+                                            Width="24"
+                                            Click="btnDeleteExercise_Click">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Image
+                                                        x:Name="imgDelete"
+                                                        Width="24"
+                                                        Height="24"
+                                                        Source="{StaticResource biDelete}" />
+                                                    <ControlTemplate.Triggers>
+                                                        <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=DataGridCell}}" Value="True">
+                                                            <Setter TargetName="imgDelete" Property="Source" Value="{StaticResource biDeleteWhite}" />
+                                                        </DataTrigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>                                            
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

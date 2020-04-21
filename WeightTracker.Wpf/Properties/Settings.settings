@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="WeightTracker.Wpf.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DataFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">..\..\..\Resources\data.xml</Value>
+    </Setting>
+    <Setting Name="StartDate" Type="System.DateTime" Scope="Application">
+      <Value Profile="(Default)">02/24/2020 23:59:00</Value>
+    </Setting>
+    <Setting Name="StartWeight" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">187.2</Value>
+    </Setting>
+    <Setting Name="TargetWeight" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">154</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

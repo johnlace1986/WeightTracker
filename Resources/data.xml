@@ -25,6 +25,9 @@
     <EXCERCISE Date="15/04/2020 00:00:00" TimeTaken="1460" Distance="5" CaloriesBurned="495" />
     <EXCERCISE Date="17/04/2020 14:04:18" TimeTaken="2626" Distance="8" CaloriesBurned="806" />
     <EXCERCISE Date="19/04/2020 19:46:24" TimeTaken="3555" Distance="11" CaloriesBurned="1098" />
+    <EXCERCISE Date="21/04/2020 00:00:00" TimeTaken="3274" Distance="10" CaloriesBurned="1000" />
+    <EXCERCISE Date="23/04/2020 00:00:00" TimeTaken="1640" Distance="5" CaloriesBurned="424" />
+    <EXCERCISE Date="25/04/2020 00:00:00" TimeTaken="3986" Distance="12" CaloriesBurned="1201" />
   </EXCERCISES>
   <WEIGHT_ENTRIES>
     <WEIGHT_ENTRY Date="02/03/2020 23:59:59" Value="185.4" />
@@ -35,5 +38,6 @@
     <WEIGHT_ENTRY Date="05/04/2020 23:59:59" Value="179.2" />
     <WEIGHT_ENTRY Date="12/04/2020 23:59:59" Value="176.6" />
     <WEIGHT_ENTRY Date="19/04/2020 23:59:59" Value="179" />
+    <WEIGHT_ENTRY Date="26/04/2020 23:59:59" Value="177.6" />
   </WEIGHT_ENTRIES>
 </DATA>

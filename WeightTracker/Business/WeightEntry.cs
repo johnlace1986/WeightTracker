@@ -107,30 +107,6 @@ namespace WeightTracker.Business
 
         #endregion
 
-        #region Instance Methods
-
-        /// <summary>
-        /// Converts the weight entry to an XML element
-        /// </summary>
-        /// <param name="document">XML document the element will be added to</param>
-        /// <returns>XML element containing the data for the weight entry</returns>
-        public XmlElement ToXml(XmlDocument document)
-        {
-            var weightEntry = document.CreateElement("WEIGHT_ENTRY");
-
-            var date = document.CreateAttribute("Date");
-            date.Value = Date.ToString();
-            weightEntry.Attributes.Append(date);
-
-            var value = document.CreateAttribute("Value");
-            value.Value = Value.ToString();
-            weightEntry.Attributes.Append(value);
-
-            return weightEntry;
-        }
-
-        #endregion
-
         #region Static Properties
 
         /// <summary>
@@ -146,23 +122,6 @@ namespace WeightTracker.Business
         #endregion
 
         #region Static Methods
-
-        /// <summary>
-        /// Loads a weight entry from the data found in the specified XML node
-        /// </summary>
-        /// <param name="xml">XML node containing the data for the weight entry</param>
-        /// <returns>Weight entry loaded from the data found in the specified XML node</returns>
-        public static WeightEntry FromXml(XmlNode xml)
-        {
-            var date = DateTime.Parse(xml.Attributes["Date"].Value);
-            var value = double.Parse(xml.Attributes["Value"].Value);
-
-            return new WeightEntry()
-            {
-                Date = date,
-                Value = value
-            };
-        }
 
         /// <summary>
         /// Converts the specified pounds value to stones (rounded down)

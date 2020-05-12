@@ -88,38 +88,6 @@ namespace WeightTracker.Business
 
         #endregion
 
-        #region Instance Methods
-
-        /// <summary>
-        /// Converts the exercise to an XML element
-        /// </summary>
-        /// <param name="document">XML document the element will be added to</param>
-        /// <returns>XML element containing the data for the exercise</returns>
-        public XmlElement ToXml(XmlDocument document)
-        {
-            var exercise = document.CreateElement("EXCERCISE");
-
-            var date = document.CreateAttribute("Date");
-            date.Value = Date.ToString();
-            exercise.Attributes.Append(date);
-
-            var timeTaken = document.CreateAttribute("TimeTaken");
-            timeTaken.Value = TimeTaken.TotalSeconds.ToString();
-            exercise.Attributes.Append(timeTaken);
-
-            var distance = document.CreateAttribute("Distance");
-            distance.Value = Distance.ToString();
-            exercise.Attributes.Append(distance);
-
-            var caloriesBurned = document.CreateAttribute("CaloriesBurned");
-            caloriesBurned.Value = CaloriesBurned.ToString();
-            exercise.Attributes.Append(caloriesBurned);
-
-            return exercise;
-        }
-
-        #endregion
-
         #region Static Properties
 
         /// <summary>
@@ -135,30 +103,7 @@ namespace WeightTracker.Business
         #endregion
 
         #region Static Methods
-
-        /// <summary>
-        /// Loads a weight entry from the data found in the specified XML node
-        /// </summary>
-        /// <param name="xml">XML node containing the data for the weight entry</param>
-        /// <returns>Weight entry loaded from the data found in the specified XML node</returns>
-        public static Exercise FromXml(XmlNode xml)
-        {
-            var date = DateTime.Parse(xml.Attributes["Date"].Value);
-            var timeTaken = TimeSpan.FromSeconds(int.Parse(xml.Attributes["TimeTaken"].Value));
-            var distance = double.Parse(xml.Attributes["Distance"].Value);
-            var caloriesBurned = int.Parse(xml.Attributes["CaloriesBurned"].Value);
-
-            var exercise = new Exercise
-            {
-                Date = date,
-                TimeTaken = timeTaken, 
-                Distance = distance, 
-                CaloriesBurned = caloriesBurned
-            };
-
-            return exercise;
-        }
-
+        
         /// <summary>
         /// Converts the specified kilometers to miles
         /// </summary>

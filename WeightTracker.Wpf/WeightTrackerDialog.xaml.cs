@@ -74,11 +74,11 @@ namespace WeightTracker.Wpf
             using var reader = new StreamReader(Settings.Default.DataFile);
             var data = JObject.Parse(await reader.ReadToEndAsync());
 
-            Exercises = data["Exercises"].ToObject<business.Exercise[]>()
+            Exercises = data["Exercises"].ToObject<IEnumerable<business.Exercise>>()
                 .OrderBy(exercise => exercise.Date)
                 .ToArray();
 
-            WeightEntries = data["WeightEntries"].ToObject<business.WeightEntry[]>()
+            WeightEntries = data["WeightEntries"].ToObject<IEnumerable<business.WeightEntry>>()
                 .OrderBy(weightEntry => weightEntry.Date)
                 .ToArray();
         }

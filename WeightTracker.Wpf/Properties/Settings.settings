@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="DataFile" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\..\..\Resources\data.xml</Value>
+      <Value Profile="(Default)">..\..\..\Resources\data.json</Value>
     </Setting>
     <Setting Name="StartDate" Type="System.DateTime" Scope="Application">
       <Value Profile="(Default)">02/24/2020 23:59:00</Value>

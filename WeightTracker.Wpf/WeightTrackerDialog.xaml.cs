@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WeightTracker.Wpf.Presentation.Windows;
 using WeightTracker.Wpf.Properties;
 using business = WeightTracker.Business;
@@ -66,34 +69,16 @@ namespace WeightTracker.Wpf
         /// </summary>
         private void LoadData()
         {
-            var document = new XmlDocument();
-            document.Load(Settings.Default.DataFile);
+            var reader = new StreamReader(Settings.Default.DataFile);
+            var data = JObject.Parse(reader.ReadToEnd());
 
-            var exercises = document["DATA"]["EXCERCISES"]
-                .Cast<XmlNode>()
-                .Select(business.Exercise.FromXml)
-                .ToList();
+            Exercises = data["Exercises"].ToObject<business.Exercise[]>()
+                .OrderBy(exercise => exercise.Date)
+                .ToArray();
 
-            exercises.Sort();
-            Exercises = exercises.ToArray();
-
-            var weightEntries = new List<business.WeightEntry>
-            {
-                new business.WeightEntry()
-                {
-                    Date = Settings.Default.StartDate,
-                    Value = Settings.Default.StartWeight,
-                    CanExpand = false,
-                    ShouldSave = false
-                }
-            };
-
-            weightEntries.AddRange(document["DATA"]["WEIGHT_ENTRIES"]
-                .Cast<XmlNode>()
-                .Select(business.WeightEntry.FromXml));
-
-            weightEntries.Sort();
-            WeightEntries = weightEntries.ToArray();
+            WeightEntries = data["WeightEntries"].ToObject<business.WeightEntry[]>()
+                .OrderBy(weightEntry => weightEntry.Date)
+                .ToArray();
         }
 
         /// <summary>
@@ -101,24 +86,15 @@ namespace WeightTracker.Wpf
         /// </summary>
         private void SaveData()
         {
-            var document = new XmlDocument();
+            var data = new
+            {
+                Exercises = Exercises.OrderBy(exercise => exercise.Date),
+                WeightEntries = WeightEntries.Where(weightEntry => weightEntry.ShouldSave).OrderBy(weightEntry => weightEntry.Date)
+            };
 
-            var data = document.CreateElement("DATA");
-            document.AppendChild(data);
-
-            var exercises = document.CreateElement("EXCERCISES");
-            data.AppendChild(exercises);
-
-            foreach (var exercise in Exercises.OrderBy(p => p.Date))
-                exercises.AppendChild(exercise.ToXml(document));
-
-            var weightEntries = document.CreateElement("WEIGHT_ENTRIES");
-            data.AppendChild(weightEntries);
-
-            foreach (var weightEntry in WeightEntries.Where(p => p.ShouldSave).OrderBy(p => p.Date))
-                weightEntries.AppendChild(weightEntry.ToXml(document));;
-
-            document.Save(Settings.Default.DataFile);
+            using var writer = new StreamWriter(Settings.Default.DataFile);
+            var serialiser = new JsonSerializer();
+            serialiser.Serialize(writer, data);
         }
 
         /// <summary>

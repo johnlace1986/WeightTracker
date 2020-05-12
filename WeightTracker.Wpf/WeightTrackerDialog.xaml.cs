@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
@@ -9,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using WeightTracker.Wpf.Presentation.Windows;
 using WeightTracker.Wpf.Properties;
 using business = WeightTracker.Business;
+using Formatting = Newtonsoft.Json.Formatting;
 
 namespace WeightTracker.Wpf
 {
@@ -67,10 +69,10 @@ namespace WeightTracker.Wpf
         /// <summary>
         /// Loads the data from an XML file
         /// </summary>
-        private void LoadData()
+        private async Task LoadData()
         {
-            var reader = new StreamReader(Settings.Default.DataFile);
-            var data = JObject.Parse(reader.ReadToEnd());
+            using var reader = new StreamReader(Settings.Default.DataFile);
+            var data = JObject.Parse(await reader.ReadToEndAsync());
 
             Exercises = data["Exercises"].ToObject<business.Exercise[]>()
                 .OrderBy(exercise => exercise.Date)
@@ -93,7 +95,10 @@ namespace WeightTracker.Wpf
             };
 
             using var writer = new StreamWriter(Settings.Default.DataFile);
-            var serialiser = new JsonSerializer();
+            var serialiser = new JsonSerializer
+            {
+                Formatting = Formatting.Indented
+            };
             serialiser.Serialize(writer, data);
         }
 

@@ -1,16 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Xml;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using WeightTracker.Wpf.Presentation.Windows;
 using WeightTracker.Wpf.Properties;
 using business = WeightTracker.Business;
-using Formatting = Newtonsoft.Json.Formatting;
 
 namespace WeightTracker.Wpf
 {
@@ -72,13 +68,13 @@ namespace WeightTracker.Wpf
         private async Task LoadData()
         {
             using var reader = new StreamReader(Settings.Default.DataFile);
-            var data = JObject.Parse(await reader.ReadToEndAsync());
+            var data = JsonConvert.DeserializeObject<Business.Data>(await reader.ReadToEndAsync());
 
-            Exercises = data["Exercises"].ToObject<IEnumerable<business.Exercise>>()
+            Exercises = data.Exercises
                 .OrderBy(exercise => exercise.Date)
                 .ToArray();
 
-            WeightEntries = data["WeightEntries"].ToObject<IEnumerable<business.WeightEntry>>()
+            WeightEntries = data.WeightEntries
                 .OrderBy(weightEntry => weightEntry.Date)
                 .ToArray();
         }
@@ -88,18 +84,17 @@ namespace WeightTracker.Wpf
         /// </summary>
         private void SaveData()
         {
-            var data = new
-            {
-                Exercises = Exercises.OrderBy(exercise => exercise.Date),
-                WeightEntries = WeightEntries.Where(weightEntry => weightEntry.ShouldSave).OrderBy(weightEntry => weightEntry.Date)
-            };
-
             using var writer = new StreamWriter(Settings.Default.DataFile);
             var serialiser = new JsonSerializer
             {
                 Formatting = Formatting.Indented
             };
-            serialiser.Serialize(writer, data);
+
+            serialiser.Serialize(writer, new Business.Data
+            {
+                Exercises = Exercises.OrderBy(exercise => exercise.Date),
+                WeightEntries = WeightEntries.Where(weightEntry => weightEntry.ShouldSave).OrderBy(weightEntry => weightEntry.Date)
+            });
         }
 
         /// <summary>

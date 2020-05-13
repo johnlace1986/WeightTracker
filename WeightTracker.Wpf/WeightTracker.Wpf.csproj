@@ -71,6 +71,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Business\Data.cs" />
     <Compile Include="Business\DistanceViewStyle.cs" />
     <Compile Include="Business\PaceViewStyle.cs" />
     <Compile Include="Business\TimeViewStyle.cs" />

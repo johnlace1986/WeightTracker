@@ -76,6 +76,16 @@ namespace WeightTracker.Wpf
 
             WeightEntries = data.WeightEntries
                 .OrderBy(weightEntry => weightEntry.Date)
+                .Union(new []
+                {
+                    new business.WeightEntry
+                    {
+                        CanExpand = false,
+                        Date = Settings.Default.StartDate,
+                        ShouldSave = false,
+                        Value = Settings.Default.StartWeight
+                    }
+                })
                 .ToArray();
         }
 

@@ -161,22 +161,29 @@ namespace WeightTracker.Wpf
         {
             var currentWeight = WeightEntries.Length == 0 ? Settings.Default.StartWeight : WeightEntries.OrderBy(p => p.Date).Last().Value;
 
-            var wed = new WeightEntryDialog(currentWeight);
-            wed.Owner = this;
-
-            if (wed.ShowDialog() == true)
+            var wed = new WeightEntryDialog(currentWeight)
             {
-                var weightEntry = new business.WeightEntry();
-                weightEntry.Date = wed.Date;
-                weightEntry.Value = wed.GetWeight();
+                Owner = this
+            };
 
-                var weightEntries = new List<business.WeightEntry>(WeightEntries);
-                weightEntries.Add(weightEntry);
-                weightEntries.Sort();
-                WeightEntries = weightEntries.ToArray();
+            if (wed.ShowDialog() != true) 
+                return;
 
-                SaveData();
-            }
+            var weightEntry = new business.WeightEntry
+            {
+                Date = wed.Date, 
+                Value = wed.GetWeight()
+            };
+
+            var weightEntries = new List<business.WeightEntry>(WeightEntries)
+            {
+                weightEntry
+            };
+
+            weightEntries.Sort();
+            WeightEntries = weightEntries.ToArray();
+
+            SaveData();
         }
 
         private void btnAddExercise_Click(object sender, RoutedEventArgs e)

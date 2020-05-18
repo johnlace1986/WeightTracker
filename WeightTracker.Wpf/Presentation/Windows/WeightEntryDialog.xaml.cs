@@ -60,7 +60,12 @@ namespace WeightTracker.Wpf.Presentation.Windows
         {
             InitializeComponent();
 
-            Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
+            var currentDate = DateTime.Now;
+
+            while (currentDate.DayOfWeek != DayOfWeek.Sunday)
+                currentDate = currentDate.Subtract(TimeSpan.FromDays(1));
+
+            Date = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59);
 
             WeightEntry.ConvertPoundsToStones(currentWeight, out var stones, out var pounds, out _);
 

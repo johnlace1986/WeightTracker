@@ -221,6 +221,18 @@
       "Distance": 15.0,
       "CaloriesBurned": 1500,
       "Date": "2020-05-17T00:00:00"
+    },
+    {
+      "TimeTaken": "00:32:54",
+      "Distance": 6.5,
+      "CaloriesBurned": 655,
+      "Date": "2020-05-19T00:00:00"
+    },
+    {
+      "TimeTaken": "00:32:36",
+      "Distance": 6.0,
+      "CaloriesBurned": 602,
+      "Date": "2020-05-21T15:37:01.7825192+01:00"
     }
   ],
   "WeightEntries": [

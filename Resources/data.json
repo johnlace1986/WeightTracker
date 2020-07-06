@@ -317,6 +317,30 @@
       "Distance": 8.0,
       "CaloriesBurned": 794,
       "Date": "2020-06-26T14:13:11.7682974+01:00"
+    },
+    {
+      "TimeTaken": "00:54:44",
+      "Distance": 10.0,
+      "CaloriesBurned": 993,
+      "Date": "2020-06-29T00:00:00"
+    },
+    {
+      "TimeTaken": "00:54:05",
+      "Distance": 10.0,
+      "CaloriesBurned": 999,
+      "Date": "2020-07-01T00:00:00"
+    },
+    {
+      "TimeTaken": "00:53:13",
+      "Distance": 10.0,
+      "CaloriesBurned": 999,
+      "Date": "2020-07-03T00:00:00"
+    },
+    {
+      "TimeTaken": "00:27:01",
+      "Distance": 5.0,
+      "CaloriesBurned": 494,
+      "Date": "2020-07-05T00:00:00"
     }
   ],
   "WeightEntries": [
@@ -438,6 +462,20 @@
       "ShouldSave": true,
       "IsRunListExpanded": false,
       "Date": "2020-06-21T23:59:59"
+    },
+    {
+      "Value": 179.0,
+      "CanExpand": true,
+      "ShouldSave": true,
+      "IsRunListExpanded": false,
+      "Date": "2020-06-28T23:59:59"
+    },
+    {
+      "Value": 178.0,
+      "CanExpand": true,
+      "ShouldSave": true,
+      "IsRunListExpanded": false,
+      "Date": "2020-07-05T23:59:59"
     }
   ]
 }
